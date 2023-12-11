@@ -1,0 +1,329 @@
+basePath: /
+definitions:
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.statusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  rassilki.Client:
+    properties:
+      code:
+        type: string
+      phone:
+        type: string
+      tag:
+        type: string
+      timezone:
+        type: string
+    required:
+    - code
+    - phone
+    - timezone
+    type: object
+  rassilki.Rassilka:
+    type: object
+  rassilki.RassilkaReview:
+    properties:
+      not_sent:
+        type: integer
+      ras_id:
+        type: integer
+      sent:
+        type: integer
+      total:
+        type: integer
+    type: object
+  rassilki.UpdateClient:
+    properties:
+      code:
+        type: string
+      phone:
+        type: string
+      tag:
+        type: string
+      timezone:
+        type: string
+    type: object
+  rassilki.UpdateRassilka:
+    properties:
+      end-time:
+        type: string
+      filter:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+      recreated:
+        type: boolean
+      start-time:
+        type: string
+      supplemented:
+        type: boolean
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API Server for Rassilki Application
+  title: Rassilki App API
+  version: "1.0"
+paths:
+  /clients:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Client object to create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/rassilki.Client'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create a new client
+      tags:
+      - clients
+  /clients/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Delete a client by ID
+      tags:
+      - clients
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rassilki.Client'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get a client by ID
+      tags:
+      - clients
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated fields for the client
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/rassilki.UpdateClient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      tags:
+      - clients
+  /rassilki:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/rassilki.RassilkaReview'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get reviews for all rassilkas
+      tags:
+      - rassilki
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Rassilka object to create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/rassilki.Rassilka'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create a new rassilka
+      tags:
+      - rassilki
+  /rassilki/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Rassilka ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Delete a rassilka by ID
+      tags:
+      - rassilki
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Rassilka ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rassilki.RassilkaReview'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get review for a specific rassilka by ID
+      tags:
+      - rassilki
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Rassilka ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateRassilka object
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/rassilki.UpdateRassilka'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Update a rassilka by ID
+      tags:
+      - rassilki
+swagger: "2.0"
